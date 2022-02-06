@@ -52,15 +52,18 @@ async def checkForFirstOfTheMonth():
     timestamp = datetime.datetime.now().day
     if timestamp == 1:
         await bot.wait_until_ready()
-        channel = bot.get_channel(488489803051040791)
-        #channel = bot.get_channel(642555024328622090) music channel for testing
+        #channel = bot.get_channel(488489803051040791)
+        channel = bot.get_channel(642555024328622090) #music channel for testing
         #mentions:
-        # mentionStr = ''
-        # fo = open("mentionList.txt", "r")
-        # namesInList = fo.read()
-        # for kv in namesInList.split(","):
-        #     mentionStr = mentionStr + '@' + kv + ' '
-        await channel.send("IT'S THE FIRST OF THE MONTH. Listen to this song: https://www.youtube.com/watch?v=4j_cOsgRY7w&ab_channel=BoneThugsMusic . This bot was made by Levi, type '-$help' for help ")
+        mentionStr = ''
+        fo = open("mentionList.txt", "r")
+        namesInList = fo.read()
+        for kv in namesInList.split(","):
+            mentionStr = mentionStr + '<@{' + kv + '}> '
+        
+        print(mentionStr)
+
+        await channel.send(f"IT'S THE FIRST OF THE MONTH. Listen to this song: https://www.youtube.com/watch?v=4j_cOsgRY7w&ab_channel=BoneThugsMusic " + mentionStr)
       
 checkForFirstOfTheMonth.start()
 
