@@ -14,26 +14,41 @@ bot.remove_command('help')
 
 @bot.command()
 async def help(ctx):
-    response = 'Hi, I\'m a bot created by Levi, every first of the month I\'ll post a link to a the Bone Thugs n Harmony - First of the month song\nType add followed by the name to add someone to the mention list when the bot posts.\nType delete followed by the name to remove a person from the mention list.\n example "-$add Leviathan" or "-$delete Leviathan" The mention feature actually isn\'t working rn, I\'ll fix it in the future'
+    response = 'Hi, I\'m a bot, every first of the month I\'ll post a link to a the Bone Thugs n Harmony - First Of The Month song.\nType -$add to be added to the mention list.\nType -$delete to be deleted from the mention list.\nReach out to Leviathan (Levi) for help.'
     await ctx.send(response)
 
 @bot.command()
 async def add(ctx):
-    fo = open("mentionList.txt", "a")
-    fo.write(ctx.author.user.id + ',')
-    fo.close()
-    response = 'You have been added to the mention list!'
-    await ctx.send(response)
+    #check if they're already added:
+    fo = open("mentionList.txt", "r")
+    found = False
+    namesInList = fo.read()
+    for kv in namesInList.split(","):
+        if kv == str(ctx.author.id):
+            found = True
+            namesInList = namesInList.replace(str(ctx.author.id)+',', '')
+            fo.close()
+            break
 
+    if found == True:
+        response = 'You are already added to the mention list.'
+    else:
+        fo = open("mentionList.txt", "a")
+        fo.write(str(ctx.author.id) + ',')
+        fo.close()
+        response = 'You have been added to the mention list!'
+    
+    await ctx.send(response)
+    
 @bot.command()
 async def delete(ctx):
     fo = open("mentionList.txt", "r")
     found = False
     namesInList = fo.read()
     for kv in namesInList.split(","):
-        if kv == ctx.author.user.id:
+        if kv == str(ctx.author.id):
             found = True
-            namesInList = namesInList.replace(ctx.author.user.id+',', '')
+            namesInList = namesInList.replace(str(ctx.author.id)+',', '')
             fo.close()
             break
 
@@ -52,18 +67,20 @@ async def checkForFirstOfTheMonth():
     timestamp = datetime.datetime.now().day
     if timestamp == 1:
         await bot.wait_until_ready()
-        #channel = bot.get_channel(488489803051040791)
-        channel = bot.get_channel(642555024328622090) #music channel for testing
-        #mentions:
+        channel = bot.get_channel(488489803051040791)
+        #channel = bot.get_channel(642555024328622090) #music channel for testing
+
+        #Mentions:
         mentionStr = ''
         fo = open("mentionList.txt", "r")
         namesInList = fo.read()
         for kv in namesInList.split(","):
-            mentionStr = mentionStr + '<@{' + kv + '}> '
+            if kv != '':
+                mentionStr = mentionStr + '<@' + kv + '> '
         
         print(mentionStr)
 
-        await channel.send(f"IT'S THE FIRST OF THE MONTH. Listen to this song: https://www.youtube.com/watch?v=4j_cOsgRY7w&ab_channel=BoneThugsMusic " + mentionStr)
+        await channel.send("IT'S THE FIRST OF THE MONTH. Listen to this song (Type -$help for bot help): https://www.youtube.com/watch?v=4j_cOsgRY7w&ab_channel=BoneThugsMusic " + mentionStr)
       
 checkForFirstOfTheMonth.start()
 
