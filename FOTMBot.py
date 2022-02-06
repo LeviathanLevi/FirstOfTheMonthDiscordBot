@@ -17,24 +17,23 @@ async def help(ctx):
     response = 'Hi, I\'m a bot created by Levi, every first of the month I\'ll post a link to a the Bone Thugs n Harmony - First of the month song\nType add followed by the name to add someone to the mention list when the bot posts.\nType delete followed by the name to remove a person from the mention list.\n example "-$add Leviathan" or "-$delete Leviathan" The mention feature actually isn\'t working rn, I\'ll fix it in the future'
     await ctx.send(response)
 
-#TODO: Add and delete need to be remade to use individuals user IDs for mentioning in the future
 @bot.command()
-async def add(ctx, name):
+async def add(ctx):
     fo = open("mentionList.txt", "a")
-    fo.write(name + ',')
+    fo.write(ctx.author.user.id + ',')
     fo.close()
-    response = 'Added: {} to the mention list.'.format(name)
+    response = 'You have been added to the mention list!'
     await ctx.send(response)
 
 @bot.command()
-async def delete(ctx, name):
+async def delete(ctx):
     fo = open("mentionList.txt", "r")
     found = False
     namesInList = fo.read()
     for kv in namesInList.split(","):
-        if kv == name:
+        if kv == ctx.author.user.id:
             found = True
-            namesInList = namesInList.replace(name+',', '')
+            namesInList = namesInList.replace(ctx.author.user.id+',', '')
             fo.close()
             break
 
@@ -42,9 +41,9 @@ async def delete(ctx, name):
         fo = open("mentionList.txt", "w")
         fo.write(namesInList)
         fo.close()
-        response = 'Removed: {} from the mention list.'.format(name)
+        response = 'You have been removed from the mention list!'
     else:
-        response = 'Could not find: {} in the mention list.'.format(name)
+        response = 'You weren\'t in the mention list before so you can\'t be removed.'
 
     await ctx.send(response)
 
