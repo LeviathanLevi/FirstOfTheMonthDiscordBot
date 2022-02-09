@@ -1,6 +1,5 @@
 # FOTMBot.py
 import os
-import discord
 import datetime
 
 from discord.ext import commands, tasks
@@ -68,8 +67,6 @@ async def checkForFirstOfTheMonth():
     if timestamp == 1:
         await bot.wait_until_ready()
         channel = bot.get_channel(488489803051040791)
-        #channel = bot.get_channel(642555024328622090) #music channel for testing
-
         #Mentions:
         mentionStr = ''
         fo = open("mentionList.txt", "r")
@@ -78,8 +75,6 @@ async def checkForFirstOfTheMonth():
             if kv != '':
                 mentionStr = mentionStr + '<@' + kv + '> '
         
-        print(mentionStr)
-
         await channel.send("IT'S THE FIRST OF THE MONTH. Listen to this song (Type -$help for bot help): https://www.youtube.com/watch?v=4j_cOsgRY7w&ab_channel=BoneThugsMusic " + mentionStr)
       
 checkForFirstOfTheMonth.start()
