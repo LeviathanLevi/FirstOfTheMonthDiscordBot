@@ -65,7 +65,7 @@ async def delete(ctx):
 async def checkForFirstOfTheMonth():
     day = datetime.datetime.now().day
     hour = datetime.datetime.now().hour
-    if day == 1 && hour == 7:
+    if day == 1 and hour == 7:
         await bot.wait_until_ready()
         channel = bot.get_channel(488489803051040791)
         #Mentions:
